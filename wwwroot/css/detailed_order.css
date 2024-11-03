@@ -1,0 +1,25 @@
+﻿.maximized_order {
+    width: 30vw;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: 5px solid black;
+    border-radius: 10px;
+    padding: 30px;
+}
+
+.order_fields_wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.maximized_order_address > label, p {
+    display: inline;
+}
+
+#maximized_order_header_label, #maximized_order_display_id {
+    font-weight: bold;
+    font-size: 30px;
+}

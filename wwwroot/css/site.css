@@ -21,6 +21,13 @@ html {
   margin-bottom: 60px;
 }*/
 
+a {
+    text-decoration: none;
+}
+p {
+    margin: 0;
+}
+
 p, h1, a, label {
     font-family: 'Courier New', Courier, monospace;
 }

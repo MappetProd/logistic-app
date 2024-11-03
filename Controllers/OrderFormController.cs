@@ -74,13 +74,23 @@ namespace LogisticApp.Controllers
         {
             if (!ModelState.IsValid)
             {
+                return BadRequest(ModelState);
             }
 
             Dictionary<string, string>? senderAddressComponents = Address.SplitInCityAddressString(model.SenderFullInCityAddress);
             Dictionary<string, string>? recipientAddressComponents = Address.SplitInCityAddressString(model.RecipientFullInCityAddress);
-
-            Postcode senderPostcode = _context.Postcodes.Single(pc => pc.Code == senderAddressComponents["postcode"]);
-            Postcode recipientPostcode = _context.Postcodes.Single(pc => pc.Code == recipientAddressComponents["postcode"]);
+            
+            Postcode senderPostcode;
+            Postcode recipientPostcode;
+            try
+            {
+                senderPostcode = _context.Postcodes.Single(pc => pc.Code == senderAddressComponents["postcode"]);
+                recipientPostcode = _context.Postcodes.Single(pc => pc.Code == recipientAddressComponents["postcode"]);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
 
             Address senderAddress = new Address(senderPostcode, senderAddressComponents["house"]);
             Address recipientAddress = new Address(recipientPostcode, recipientAddressComponents["house"]);

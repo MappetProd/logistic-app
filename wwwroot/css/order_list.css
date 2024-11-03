@@ -11,6 +11,7 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     margin: 0px 3vw 0px 3vw;
+    gap: 20px;
 }
 
 .order_display_id {

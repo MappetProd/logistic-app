@@ -6,27 +6,33 @@
 
 @{
     Layout = "_Layout";
+    List<Order> orders = ViewBag.Orders;
+    orders.Sort((x, y) => x.DisplayId.CompareTo(y.DisplayId));
 }
 
 <section id="allorders">
     @{
-        foreach (Order order in ViewBag.Orders)
+        foreach (Order order in orders)
         {
             Address sender = order.SenderAddress;
             Address recipient = order.RecipientAddress;
-            <div class="minimized_order">
-                <p class="order_display_id">@order.DisplayId</p>
-                <div class="order_fields_wrapper">
-                    <label class="minimized_order_label">Адрес отправителя:</label>
-                    <p class="minimized_order_field">г. @sender.City.Name @sender.Street.StreetType.Name @sender.Street.Name д. @sender.House.Number, @sender.House.Postcode.Code</p>
-                    <label class="minimized_order_label">Адрес получателя:</label>
-                    <p class="minimized_order_field">г. @recipient.City.Name @recipient.Street.StreetType.Name @recipient.Street.Name д. @recipient.House.Number, @recipient.House.Postcode.Code</p>
-                    <label class="minimized_order_label">Дата и время создания:</label>
-                    <p class="minimized_order_field"> @order.CreationDtm.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</p>
-                    <label class="minimized_order_label">Вес груза (кг.):</label>
-                    <p class="minimized_order_field">@(order.CargoWeightInGrams / 1000f)</p>
+            string id = order.Id.ToString();
+            <a href="@Url.Action("Index", "DetailedOrder", new {orderId = id})">
+                <div class="minimized_order">
+                    <p class="order_display_id">@order.DisplayId</p>
+                    <div class="order_fields_wrapper">
+                        <label class="minimized_order_label">Адрес отправителя:</label>
+                        <p class="minimized_order_field">г. @sender.City.Name @sender.Street.StreetType.Name @sender.Street.Name д. @sender.House.Number, @sender.House.Postcode.Code</p>
+                        <label class="minimized_order_label">Адрес получателя:</label>
+                        <p class="minimized_order_field">г. @recipient.City.Name @recipient.Street.StreetType.Name @recipient.Street.Name д. @recipient.House.Number, @recipient.House.Postcode.Code</p>
+                        <label class="minimized_order_label">Дата и время создания:</label>
+                        <p class="minimized_order_field"> @order.CreationDtm.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</p>
+                        <label class="minimized_order_label">Вес груза (кг.):</label>
+                        <p class="minimized_order_field">@(order.CargoWeightInGrams / 1000f)</p>
+                    </div>
                 </div>
-            </div>
+            </a>
+            
         }
     }
 </section>

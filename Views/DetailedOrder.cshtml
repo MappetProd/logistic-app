@@ -1,0 +1,66 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@using LogisticApp.Model
+
+@{
+    Layout = "_Layout";
+    Order currOrder = ViewBag.CurrentOrder;
+    Address sender = currOrder.SenderAddress;
+    Address recipient = currOrder.RecipientAddress;
+}
+
+<div class="maximized_order">
+    <div class="order_header">
+        <label id="maximized_order_header_label">НОМЕР ЗАКАЗА:</label>
+        <p id="maximized_order_display_id">@currOrder.DisplayId</p>
+    </div>
+
+    <div class="order_fields_wrapper">
+
+        <div class="maximized_order_address_wrapper">
+            <label class="minimized_order_label">Адрес отправителя</label>
+            <div class="maximized_order_address">
+                <label>Город:</label>
+                <p>@sender.City.Name</p>
+                <br>
+                <label>@sender.Street.StreetType.Name:</label>
+                <p>@sender.Street.Name</p>
+                <br>
+                <label>Дом:</label>
+                <p>@sender.House.Number</p>
+                <br>
+                <label>Почтовый индекс:</label>
+                <p>@sender.House.Postcode.Code</p>
+            </div>
+        </div>
+
+        <div class="maximized_order_address_wrapper">
+            <label class="minimized_order_label">Адрес отправителя</label>
+            <div class="maximized_order_address">
+                <label>Город:</label>
+                <p>@recipient.City.Name</p>
+                <br>
+                <label>@recipient.Street.StreetType.Name:</label>
+                <p>@recipient.Street.Name</p>
+                <br>
+                <label>Дом:</label>
+                <p>@recipient.House.Number</p>
+                <br>
+                <label>Почтовый индекс:</label>
+                <p>@recipient.House.Postcode.Code</p>
+            </div>
+        </div>
+
+        <div>
+            <label class="minimized_order_label">Дата и время создания:</label>
+            <p class="minimized_order_field">@currOrder.CreationDtm.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</p>
+        </div>
+
+        <div>
+            <label class="minimized_order_label">Вес груза (кг.):</label>
+            <p class="minimized_order_field">@(currOrder.CargoWeightInGrams / 1000f)</p>
+        </div>
+    </div>
+</div>
