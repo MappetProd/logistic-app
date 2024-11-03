@@ -1,0 +1,18 @@
+﻿header {
+    display: flex;
+    flex-direction: column;
+    width: 50vw;
+    margin: 0 auto;
+    gap: 10px;
+    padding: 20px;
+}
+
+    header h1 {
+        text-align: center;
+    }
+
+    header nav {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+    }

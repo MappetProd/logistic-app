@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" type="text/css" href="~/css/site.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/layout.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/form.css" />
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    <header>
+        <h1> Приёмка заказов на доставку </h1>
+        <nav id="site-navigation">
+            <a href="">Все заказы</a>
+            <a href="@Url.Action("Index", "OrderForm")">Создать заказ</a>
+        </nav>
+    </header>
+
+    @RenderBody()
+</body>
+
+@RenderSection("Scripts", false)
+
+</html>

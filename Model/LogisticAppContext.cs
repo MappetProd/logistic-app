@@ -12,7 +12,8 @@ namespace LogisticApp.Model
         public DbSet<City> Cities { get; set; }
         public DbSet<Street> Streets{ get; set; }
         public DbSet<House> Houses { get; set; }
-        public DbSet<Building> Buildings{ get; set; }
+        public DbSet<Postcode> Postcodes { get; set; }
+        public DbSet<StreetType> StreetTypes { get; set; }
 
         public LogisticAppContext()
         {
@@ -21,12 +22,35 @@ namespace LogisticApp.Model
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+            optionsBuilder
+                .UseLazyLoadingProxies()
+                .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Postcode>().HasIndex(p => p.Code).IsUnique();
 
+
+            /*modelBuilder.Entity<City>()
+                .HasMany(c => c.Streets)
+                .WithOne(s => s.City)
+                .HasForeignKey(s => s.CityId)
+                .IsRequired();
+
+            modelBuilder.Entity<Street>()
+                .HasMany(s => s.Houses)
+                .WithOne(h => h.Street)
+                .HasForeignKey(h => h.StreetId)
+                .IsRequired();*/
+
+            /*modelBuilder.Entity<Order>()
+                .HasOne(o => o.SenderAdress)
+                .WithMany(a => a.Orders);
+
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.RecipientAddress)
+                .WithMany(a => a.Orders);*/
         }
     }
 }

@@ -16,9 +16,15 @@ namespace LogisticApp.Model
         [Column("city_id")]
         public Guid CityId { get; set; }
 
-        [ForeignKey(nameof(CityId))]
-        public City City{ get; set; }
+        [Column("street_type_id")]
+        public Guid StreetTypeId { get; set; }
 
-        public List<House> Houses { get; set; }
+        [ForeignKey(nameof(CityId))]
+        public virtual City City{ get; set; }
+
+        [ForeignKey(nameof(StreetTypeId))]
+        public virtual StreetType StreetType { get; set; }
+
+        public virtual List<House> Houses { get; set; }
     }
 }

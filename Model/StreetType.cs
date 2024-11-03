@@ -1,18 +1,15 @@
 ﻿using MassTransit;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LogisticApp.Model
 {
-    public class Country
+
+    public class StreetType
     {
-        [Column("country_id")]
-        [Key]
+        [Column("street_type_id")]
         public Guid Id { get; set; } = NewId.NextGuid();
 
-        [Column("country_name")]
+        [Column("street_type_name")]
         public string Name { get; set; }
-
-        public virtual List<City> Cities { get; set; }
     }
 }

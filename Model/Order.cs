@@ -10,14 +10,20 @@ namespace LogisticApp.Model
         [Key]
         public Guid Id { get; set; } = NewId.NextGuid();
 
-        [Column("order_unique_number")]
-        public int UniqueNumber { get; set; }
+        [Column("order_display_id")]
+        public string DisplayId { get; set; }
 
         [Column("sender_address_id")]
-        public Address SenderAdress { get; set; }
+        public Guid SenderAddressId { get; set; }
+
+        [ForeignKey(nameof(SenderAddressId))]
+        public virtual Address SenderAdress { get; set; }
 
         [Column("recipient_address_id")]
-        public Address RecipientAddress { get; set; }
+        public Guid RecipientAddressId { get; set; }
+
+        [ForeignKey(nameof(RecipientAddressId))]
+        public virtual Address RecipientAddress { get; set; }
 
         [Column("cargo_weight_in_grams")]
         public int CargoWeightInGrams { get; set; }

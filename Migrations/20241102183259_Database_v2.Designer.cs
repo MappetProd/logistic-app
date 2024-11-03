@@ -4,6 +4,7 @@ using LogisticApp.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,16 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LogisticApp.Migrations
 {
     [DbContext(typeof(LogisticAppContext))]
-    partial class LogisticAppContextModelSnapshot : ModelSnapshot
+    [Migration("20241102183259_Database_v2")]
+    partial class Database_v2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.10")
-                .HasAnnotation("Proxies:ChangeTracking", false)
-                .HasAnnotation("Proxies:CheckEquality", false)
-                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
@@ -145,18 +145,16 @@ namespace LogisticApp.Migrations
                         .HasColumnName("order_display_id");
 
                     b.Property<Guid>("RecipientAddressId")
-                        .HasColumnType("binary(16)")
-                        .HasColumnName("recipient_address_id");
+                        .HasColumnType("binary(16)");
 
-                    b.Property<Guid>("SenderAddressId")
-                        .HasColumnType("binary(16)")
-                        .HasColumnName("sender_address_id");
+                    b.Property<Guid>("SenderAdressId")
+                        .HasColumnType("binary(16)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("RecipientAddressId");
 
-                    b.HasIndex("SenderAddressId");
+                    b.HasIndex("SenderAdressId");
 
                     b.ToTable("Orders");
                 });
@@ -215,7 +213,7 @@ namespace LogisticApp.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("binary(16)")
-                        .HasColumnName("street_type_id");
+                        .HasColumnName("steet_type_id");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -224,7 +222,7 @@ namespace LogisticApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("StreetTypes");
+                    b.ToTable("StreetType");
                 });
 
             modelBuilder.Entity("LogisticApp.Model.Address", b =>
@@ -294,7 +292,7 @@ namespace LogisticApp.Migrations
 
                     b.HasOne("LogisticApp.Model.Address", "SenderAdress")
                         .WithMany()
-                        .HasForeignKey("SenderAddressId")
+                        .HasForeignKey("SenderAdressId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

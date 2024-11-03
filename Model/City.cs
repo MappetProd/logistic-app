@@ -17,9 +17,9 @@ namespace LogisticApp.Model
         public Guid CountryId { get; set; }
 
         [ForeignKey(nameof(CountryId))]
-        public Country Country { get; set; }
+        public virtual Country Country { get; set; }
 
-        public List<Street> Streets { get; set; }
+        public virtual List<Street> Streets { get; set; }
 
     }
 }
