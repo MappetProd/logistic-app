@@ -1,7 +1,9 @@
 ﻿using LogisticApp.Model;
+using LogisticApp.ViewModels;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Specialized;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -26,10 +28,10 @@ namespace LogisticApp.Controllers
         public IActionResult GetSuggestedCities()
         {
             string cityName = HttpContext.Request.Query["term"].ToString();
-            List<string> suggestedNames = _context.Cities
-                .Where(c => Regex.IsMatch(c.Name, @"" + cityName))
-                .Select(c => c.Name)
-                .ToList();
+            var suggestedNames = _context.Cities
+                .Where(c => EF.Functions.Like(c.Name, $"%{cityName}%"))
+                .Select(c => c.Name).ToList();
+
 
             return Ok(suggestedNames);
         }
@@ -45,7 +47,7 @@ namespace LogisticApp.Controllers
             string? inputAddress = test["address"];
 
             List<City> cities = _context.Cities
-            .Where(c => Regex.IsMatch(c.Name, @"" + cityName))
+            .Where(c => EF.Functions.Like(c.Name, $"%{cityName}%"))
             .ToList();
 
             List<string> allAddresses = new List<string>();
@@ -61,23 +63,21 @@ namespace LogisticApp.Controllers
             }
 
             List<string> suggestedAddresses = allAddresses
-                .Where(fullAddressString => Regex.IsMatch(fullAddressString, @"" + inputAddress))
+                .Where(fullAddressString => Regex.IsMatch(fullAddressString, @"" + inputAddress, RegexOptions.IgnoreCase))
                 .ToList();
 
             return Ok(suggestedAddresses);
         }
 
         [HttpPost]
-        public IActionResult CreateOrder(IFormCollection form)
+        public IActionResult CreateOrder(OrderViewModel model)
         {
-            string? senderFullInCityAddress = form["sender_address"];
-            Dictionary<string, string> senderAddressComponents = Address.SplitInCityAddressString(senderFullInCityAddress);
+            if (!ModelState.IsValid)
+            {
+            }
 
-            string? recipientFullAddress = form["recipient_address"];
-            Dictionary<string, string> recipientAddressComponents = Address.SplitInCityAddressString(recipientFullAddress);
-
-            string? orderCreationDtm = form["order_creation_dtm"];
-            string? cargoWeightInGrams = form["cargo_weight_in_grams"];
+            Dictionary<string, string>? senderAddressComponents = Address.SplitInCityAddressString(model.SenderFullInCityAddress);
+            Dictionary<string, string>? recipientAddressComponents = Address.SplitInCityAddressString(model.RecipientFullInCityAddress);
 
             Postcode senderPostcode = _context.Postcodes.Single(pc => pc.Code == senderAddressComponents["postcode"]);
             Postcode recipientPostcode = _context.Postcodes.Single(pc => pc.Code == recipientAddressComponents["postcode"]);
@@ -85,18 +85,21 @@ namespace LogisticApp.Controllers
             Address senderAddress = new Address(senderPostcode, senderAddressComponents["house"]);
             Address recipientAddress = new Address(recipientPostcode, recipientAddressComponents["house"]);
 
-            Order order = new Order {
-                SenderAdress = senderAddress,
-                RecipientAddress = recipientAddress,
-                CreationDtm = DateTime.Parse(orderCreationDtm),
+            Order order = new Order
+            {
+                SenderAddressId = senderAddress.Id,
+                RecipientAddressId = recipientAddress.Id,
+                CreationDtm = model.CreationDtm.ToUniversalTime(),
                 DisplayId = $"O-{1000 + _context.Orders.Count()}",
-                CargoWeightInGrams = int.Parse(cargoWeightInGrams) };
-            
+                CargoWeightInGrams = (int)(model.CargoWeightInKilograms * 1000)
+            };
+
             _context.Addresses.Add(senderAddress);
             _context.Addresses.Add(recipientAddress);
             _context.Orders.Add(order);
+            _context.SaveChanges();
 
-            return Redirect("~/Views/Home/Index.cshtml");
+            return View("~/Views/Home/Index.cshtml");
         }
     }
 }

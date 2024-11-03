@@ -17,7 +17,7 @@ namespace LogisticApp.Model
         public Guid SenderAddressId { get; set; }
 
         [ForeignKey(nameof(SenderAddressId))]
-        public virtual Address SenderAdress { get; set; }
+        public virtual Address SenderAddress { get; set; }
 
         [Column("recipient_address_id")]
         public Guid RecipientAddressId { get; set; }

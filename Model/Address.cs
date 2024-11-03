@@ -77,17 +77,48 @@ namespace LogisticApp.Model
             CityId = City.Id;
         }
 
-        public static Dictionary<string, string> SplitInCityAddressString(string fullInCityAddress)
+        public static Dictionary<string, string>? SplitInCityAddressString(string fullInCityAddress)
         {
-            Regex pattern = new Regex("(ул.)|(д.)|(,)");
-            string fullInCityAddressStringFormated = pattern.Replace(fullInCityAddress, " ");
+            //var pattern = @"(ул\.)|(д\.)|(,)|(проспект)|(улица)";
+
+
+            Regex streetPattern = new Regex(@"(^улица.\w*)|(^проспект.\w*)");
+            Regex housePattern = new Regex(@"(д\.?.\w*)");
+            Regex postcodePattern = new Regex(@"(\,?.\d*$)");
+
+            Match streetMatch = streetPattern.Match(fullInCityAddress);
+            Match houseMatch = housePattern.Match(fullInCityAddress);
+            Match postcodeMatch = postcodePattern.Match(fullInCityAddress);
+            if (!(streetMatch.Success && houseMatch.Success && postcodeMatch.Success))
+            {
+                return null;
+            }
+
+            Dictionary<string, string> addressComponents = new Dictionary<string, string>();
+
+            int index = streetMatch.Value.IndexOf("улица");
+            string street;
+            if (index < 0)
+            {
+                street = streetMatch.Value.Replace("проспект", "").Trim();
+            }
+            else
+            {
+                street = streetMatch.Value.Replace("улица", "").Trim();
+            }
+
+            addressComponents["street"] = street;
+            addressComponents["house"] = houseMatch.Value.Remove(0, 3);
+            addressComponents["postcode"] = postcodeMatch.Value.Remove(0, 2);
+            /*string fullInCityAddressStringFormated = pattern.Replace(fullInCityAddress, " ");
             string[] addressSplited = fullInCityAddressStringFormated.Split(' ');
+            addressSplited = addressSplited.Where(s => s != " ").ToArray();
 
             Dictionary<string, string> addressComponents = new Dictionary<string, string>();
             addressComponents["street"] = addressSplited[0];
             addressComponents["house"] = addressSplited[1];
-            addressComponents["postcode"] = addressSplited[2];
-            
+            addressComponents["postcode"] = addressSplited[2];*/
+
             return addressComponents;
         }
     }

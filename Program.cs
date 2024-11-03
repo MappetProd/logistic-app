@@ -10,12 +10,9 @@ var optionsBuilder = new DbContextOptionsBuilder<LogisticAppContext>();
 using (var context = new LogisticAppContext())
 {
     DataSeeder.SeedData(context);
-
-    context.Cities.Include(c => c.Streets);
-    context.Streets.Include(s => s.Houses);
-    context.Houses.Include(h => h.Street);
 }
 builder.Services.AddDbContext<LogisticAppContext>();
+builder.Services.AddMvc();
 
 var app = builder.Build();
 
