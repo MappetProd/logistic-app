@@ -17,7 +17,8 @@ services:
       context: LogisticApp
       dockerfile: Dockerfile
     depends_on:
-        - db
+        db:
+            condition: service_started
     ports:
         - "8888:80"
     restart: always
