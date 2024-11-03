@@ -5,9 +5,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Configuration["DB_PASSWORD"] = "סהפûû123";
+builder.Configuration["DB_HOST"] = "localhost";
+builder.Configuration["DB_PORT"] = "3306";
 
-var optionsBuilder = new DbContextOptionsBuilder<LogisticAppContext>();
-using (var context = new LogisticAppContext())
+using (var context = new LogisticAppContext(builder.Configuration))
 {
     DataSeeder.SeedData(context);
 }

@@ -4,7 +4,8 @@ namespace LogisticApp.Model
 {
     public class LogisticAppContext : DbContext
     {
-        public static readonly string connectionString = "server=127.0.0.1;uid=root;pwd=сдфыы123;database=logistic_app;port=3306;GuidFormat=Binary16;";
+        //public static readonly string connectionString = "server=127.0.0.1;uid=root;pwd=сдфыы123;database=logistic_app;port=3306;GuidFormat=Binary16;";
+        private readonly IConfiguration _configuration;
 
         public DbSet<Order> Orders { get; set; }
         public DbSet<Address> Addresses { get; set; }
@@ -20,8 +21,22 @@ namespace LogisticApp.Model
             Database.EnsureCreated();
         }
 
+        public LogisticAppContext(IConfiguration configuration)
+        {
+            _configuration = configuration;
+            Database.EnsureCreated();
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+
+            string connectionString = $"server={_configuration["DB_HOST"]};" +
+                $"uid=root;" +
+                $"pwd={_configuration["DB_PASSWORD"]};" +
+                $"database=logistic_app;" +
+                $"port={_configuration["DB_PORT"]};" +
+                $"GuidFormat=Binary16;";
+
             optionsBuilder
                 .UseLazyLoadingProxies()
                 .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
