@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Configuration["DB_PASSWORD"] = "סהפûû123";
-builder.Configuration["DB_HOST"] = "localhost";
+builder.Configuration["DB_HOST"] = "db";
 builder.Configuration["DB_PORT"] = "3306";
 
 using (var context = new LogisticAppContext(builder.Configuration))

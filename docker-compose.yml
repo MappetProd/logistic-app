@@ -1,8 +1,23 @@
 version: '3.4'
 
+volumes:
+  datafiles:
+
 services:
+  db:
+    image: mysql:8.0.0
+    volumes:
+        - datafiles:/var/lib/mysql
+    restart: always
+    environment:
+        MYSQL_ROOT_PASSWORD: сдфыы123
   logisticapp:
     image: ${DOCKER_REGISTRY-}logisticapp
     build:
       context: LogisticApp
       dockerfile: Dockerfile
+    depends_on:
+        - db
+    ports:
+        - "8888:80"
+    restart: always

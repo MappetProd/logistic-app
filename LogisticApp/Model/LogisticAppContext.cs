@@ -35,7 +35,8 @@ namespace LogisticApp.Model
                 $"pwd={_configuration["DB_PASSWORD"]};" +
                 $"database=logistic_app;" +
                 $"port={_configuration["DB_PORT"]};" +
-                $"GuidFormat=Binary16;";
+                $"GuidFormat=Binary16;" +
+                $"SSL Mode=None";
 
             optionsBuilder
                 .UseLazyLoadingProxies()
